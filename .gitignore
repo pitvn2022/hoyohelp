@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Hoyohelp
+data/bot/bot.db
+enka_network/enka_card/enka_card/attributes/Genshin
+utility/config.py
+
 # C extensions
 *.so
 
