@@ -108,7 +108,7 @@ class RealtimeNotes:
             discord.InvalidData,
         ) as e:  # 發送訊息失敗，移除此使用者
             LOG.Except(
-                f"自動檢查即時便箋發送訊息失敗，移除此使用者 {LOG.User(user.discord_id)}：{e}"
+                f"Automatic check and send reminder message failed, removing user {LOG.User(user.discord_id)}: {e}"
             )
             await Database.delete_instance(user)
         except Exception as e:
@@ -117,6 +117,6 @@ class RealtimeNotes:
             # 若使用者不在發送訊息的頻道則移除
             if discord_user.mentioned_in(msg_sent) is False:
                 LOG.Except(
-                    f"自動檢查即時便箋使用者不在頻道，移除此使用者 {LOG.User(discord_user)}"
+                    f"Automatic check shows the user is not in the channel, removing user {LOG.User(discord_user)}"
                 )
                 await Database.delete_instance(user)
