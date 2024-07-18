@@ -5,6 +5,8 @@ from discord.ext import commands, tasks
 from aiohttp import web
 import time
 
+from utility import LOG  # Import your logging utility
+
 class Server(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -32,7 +34,7 @@ class Server(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Web server running on http://localhost:8080")
+        LOG.System("Web server running on http://localhost:8080")
 
     def cog_unload(self):
         self.web_server.cancel()
