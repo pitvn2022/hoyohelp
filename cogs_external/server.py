@@ -6,7 +6,7 @@ from aiohttp import web
 import time
 import logging
 
-from utility import LOG  # Import your logging utility
+from utility import LOG, config  # Import your logging utility and config
 
 class Server(commands.Cog):
     def __init__(self, bot):
@@ -23,7 +23,7 @@ class Server(commands.Cog):
     @tasks.loop(count=1)
     async def web_server(self):
         await self.runner.setup()
-        site = web.TCPSite(self.runner, 'localhost', 8080)
+        site = web.TCPSite(self.runner, 'localhost', config.prometheus_server_port)
         await site.start()
 
     async def handle_root(self, request):
@@ -38,7 +38,7 @@ class Server(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        LOG.System("Web server running on http://localhost:8080")
+        LOG.System(f"Web server running on http://localhost:{config.prometheus_server_port}")
 
     def cog_unload(self):
         self.web_server.cancel()
