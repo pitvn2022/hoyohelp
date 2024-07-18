@@ -23,7 +23,7 @@ class Server(commands.Cog):
     @tasks.loop(count=1)
     async def web_server(self):
         await self.runner.setup()
-        site = web.TCPSite(self.runner, 'localhost', config.prometheus_server_port)
+        site = web.TCPSite(self.runner, 'localhost', config.web_server_port)  # Use the new port
         await site.start()
 
     async def handle_root(self, request):
@@ -38,7 +38,7 @@ class Server(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        LOG.System(f"Web server running on http://localhost:{config.prometheus_server_port}")
+        LOG.System(f"Web server running on http://localhost:{config.web_server_port}")
 
     def cog_unload(self):
         self.web_server.cancel()
