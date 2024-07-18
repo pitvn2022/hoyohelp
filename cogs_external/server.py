@@ -10,17 +10,17 @@ class Server(commands.Cog):
         self.bot = bot
         self.start_time = time.time()
         self.web_app = web.Application()
-        self.web_app.router.add_get('/uptime', self.handle_uptime)
+        self.web_app.router.add_get('/', self.handle_root)
         self.runner = web.AppRunner(self.web_app)
         self.web_server.start()
 
     @tasks.loop(count=1)
     async def web_server(self):
         await self.runner.setup()
-        site = web.TCPSite(self.runner, '0.0.0.0', 8080)
+        site = web.TCPSite(self.runner, 'localhost', 8080)
         await site.start()
 
-    async def handle_uptime(self, request):
+    async def handle_root(self, request):
         uptime_seconds = int(time.time() - self.start_time)
         uptime_str = self.format_uptime(uptime_seconds)
         return web.Response(text=f"Uptime: {uptime_str}")
@@ -32,7 +32,7 @@ class Server(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"Web server running on http://0.0.0.0:8080")
+        print("Web server running on http://localhost:8080")
 
     def cog_unload(self):
         self.web_server.cancel()
