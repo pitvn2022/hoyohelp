@@ -23,13 +23,13 @@ def get_server_name(key: str) -> str:
     return {
         "cn_gf01": "天空島",
         "cn_qd01": "世界樹",
-        "os_usa": "美服",
-        "os_euro": "歐服",
-        "os_asia": "亞服",
+        "os_usa": "America",
+        "os_euro": "Europe",
+        "os_asia": "Asia",
         "os_cht": "台港澳服",
-        "prod_official_usa": "美服",
-        "prod_official_euro": "歐服",
-        "prod_official_asia": "亞服",
+        "prod_official_usa": "America",
+        "prod_official_euro": "Europe",
+        "prod_official_asia": "Asia",
         "prod_official_cht": "台港澳服",
         "prod_gf_usa": "美服",
         "prod_gf_eu": "歐服",
@@ -38,9 +38,9 @@ def get_server_name(key: str) -> str:
         "1": "天空島",
         "2": "天空島",
         "5": "世界樹",
-        "6": "美服",
-        "7": "歐服",
-        "8": "亞服",
+        "6": "America",
+        "7": "Europe",
+        "8": "Asia",
         "9": "台港澳服",
     }.get(key, "")
 
@@ -49,10 +49,10 @@ def get_day_of_week(time: datetime) -> str:
     """從時間中取得星期幾的字串，若時間在兩天內則以"今天"、"明天"表示"""
     delta = time.date() - datetime.now().astimezone().date()
     if delta.days == 0:
-        return "今天"
+        return "Today"
     elif delta.days == 1:
-        return "明天"
-    return {0: "週一", 1: "週二", 2: "週三", 3: "週四", 4: "週五", 5: "週六", 6: "週日"}.get(
+        return "Tomorrow"
+    return {0: "Monday", 1: "Tuesday", 2: "Wednesday", 3: "Thursday", 4: "Friday", 5: "Saturday", 6: "Sunday"}.get(
         time.weekday(), ""
     )
 

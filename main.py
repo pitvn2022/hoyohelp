@@ -36,7 +36,7 @@ class GenshinDiscordBot(commands.AutoShardedBot):
         await database.Database.init()
 
         # 初始化 genshin api 角色名字
-        await genshin.utility.update_characters_ambr(["zh-tw"])
+        await genshin.utility.update_characters_ambr(["vi-vn"])
 
         # 從 cogs 資料夾載入所有 cog
         for filepath in Path("./cogs").glob("**/*cog.py"):
@@ -68,9 +68,9 @@ class GenshinDiscordBot(commands.AutoShardedBot):
     async def close(self) -> None:
         # 關閉資料庫
         await database.Database.close()
-        LOG.System("on_close: 資料庫已關閉")
+        LOG.System("on_close: Database closed")
         await super().close()
-        LOG.System("on_close: 機器人已結束")
+        LOG.System("on_close: Bot shutdown complete")
 
     async def on_command(self, ctx: commands.Context):
         LOG.CmdResult(ctx)

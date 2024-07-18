@@ -140,17 +140,17 @@ class ColorTool:
     """自定義顏色列表"""
     #
     #   設定標籤顏色(自己改喜歡的顏色)
-    SYSTEM = f"{_BRIGHT_PURPLE}【系統】{RESET}"  # 系統:淡紫色
-    ERROR = f"{_RED}【錯誤】{RESET}"  # 錯誤:紅色
-    OK = f"{_LIGHT_GREEN}【完成】{RESET}"  # 完成:亮綠色
-    EVENT = f"{_LIGHT_YELLOW}【事件】{RESET}"  # 事件:亮黃色
-    COMMAND = f"{_BRIGHT_BLUE}【指令】{RESET}"  # 指令:亮藍色
-    EXCEPTION = f"{_BRIGHT_MAGENTA}【例外】{RESET}"  # 例外:亮桃紅
-    INFO = f"{_BRIGHT_CYAN_GREEN}【資訊】{RESET}"  # 資訊:亮青色
-    DEBUG = f"{_LIGHT_RED}【除錯】{RESET}"  # 除錯:亮紅色
-    TEST = f"{_GOLD}【測試】{RESET}"  # 測試:金色
-    WARN = f"{_ORANGE}【警告】{RESET}"  # 警告:橘色
-    INTERACTION = f"{_LIME}【互動】{RESET}"  # 互動:萊姆綠
+    SYSTEM = f"{_BRIGHT_PURPLE}【SYSTEM】{RESET}"  # 系統:淡紫色
+    ERROR = f"{_RED}【ERROR】{RESET}"  # 錯誤:紅色
+    OK = f"{_LIGHT_GREEN}【OK】{RESET}"  # 完成:亮綠色
+    EVENT = f"{_LIGHT_YELLOW}【EVENT】{RESET}"  # 事件:亮黃色
+    COMMAND = f"{_BRIGHT_BLUE}【COMMAND】{RESET}"  # 指令:亮藍色
+    EXCEPTION = f"{_BRIGHT_MAGENTA}【EXCEPTION】{RESET}"  # 例外:亮桃紅
+    INFO = f"{_BRIGHT_CYAN_GREEN}【INFO】{RESET}"  # 資訊:亮青色
+    DEBUG = f"{_LIGHT_RED}【DEBUG】{RESET}"  # 除錯:亮紅色
+    TEST = f"{_GOLD}【TEST】{RESET}"  # 測試:金色
+    WARN = f"{_ORANGE}【WARN】{RESET}"  # 警告:橘色
+    INTERACTION = f"{_LIME}【INTERACTION】{RESET}"  # 互動:萊姆綠
 
     def RGB(self, Red: int = 255, Green: int = 255, Blue: int = 255, font: bool = True) -> str:
         """使用RGB獲得ANSI轉義序列

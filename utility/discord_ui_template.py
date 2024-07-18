@@ -18,6 +18,6 @@ class EmbedTemplate:
         embed.description = str(exception)
 
         if "title" not in kwargs:
-            embed.title = "發生錯誤！"
+            embed.title = "An error has occurred！"
 
         return embed
