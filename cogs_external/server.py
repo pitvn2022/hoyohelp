@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands, tasks
 from aiohttp import web
 import time
+import logging
 
 from utility import LOG  # Import your logging utility
 
@@ -15,6 +16,9 @@ class Server(commands.Cog):
         self.web_app.router.add_get('/', self.handle_root)
         self.runner = web.AppRunner(self.web_app)
         self.web_server.start()
+
+        # Suppress aiohttp access logs
+        logging.getLogger('aiohttp.access').setLevel(logging.WARNING)
 
     @tasks.loop(count=1)
     async def web_server(self):
