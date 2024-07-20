@@ -1,3 +1,4 @@
+import asyncio
 import os
 import sys
 
@@ -7,10 +8,10 @@ from discord.ext import commands
 
 from utility import config, LOG
 
-# Custom check for the test server
-def is_in_test_server():
+# Custom owner check
+def is_owner():
     async def predicate(interaction: discord.Interaction):
-        return interaction.guild and interaction.guild.id == config.test_server_id
+        return interaction.user.id == config.owner_id
     return app_commands.check(predicate)
 
 class Restart(commands.Cog):
@@ -18,13 +19,13 @@ class Restart(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name="restart", description="Restart the bot")
-    @is_in_test_server()
+    @is_owner()
     async def restart(self, interaction: discord.Interaction):
         await interaction.response.send_message("Restarting the bot...", ephemeral=True)
         LOG.System("Restart command received, restarting the bot...")
 
-        # Use os.execv to restart the bot
+        await self.bot.close()
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
 async def setup(bot: commands.Bot):
-    await bot.add_cog(Restart(bot), guild=discord.Object(id=config.test_server_id))
+    await bot.add_cog(Restart(bot))
