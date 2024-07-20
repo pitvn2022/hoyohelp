@@ -35,11 +35,11 @@ class Dropdown(discord.ui.Select):
                     label=f"★{c.rarity} E{c.rank} Lv.{c.level} {c.name}", value=str(i)
                 )
                 if c.equip is not None:
-                    option.description = f"光錐：S{c.equip.rank} Lv.{c.equip.level} {c.equip.name}"
+                    option.description = f"Light Cone：S{c.equip.rank} Lv.{c.equip.level} {c.equip.name}"
                 options.append(option)
 
         super().__init__(
-            placeholder=f"選擇角色 (第 {index}~{index + len(characters) - 1} 名)",
+            placeholder=f"Select character (No. {index} to {index + len(characters) - 1})",
             min_values=1,
             max_values=1,
             options=options,
@@ -54,7 +54,7 @@ class Dropdown(discord.ui.Select):
         else:
             embed = genshin_py.parse_starrail_character(c)
         embed.set_author(
-            name=f"{self.user.display_name} 的角色一覽",
+            name=f"{self.user.display_name}'s character list",
             icon_url=self.user.display_avatar.url,
         )
         await interaction.response.edit_message(content=None, embed=embed)
