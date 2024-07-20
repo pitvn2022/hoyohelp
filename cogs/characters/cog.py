@@ -22,18 +22,18 @@ class CharactersCog(commands.Cog, name="character"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="zbeta_character_overview", description="Publicly display all of my characters")
-    @app_commands.rename(game="遊戲", sort_key="排序", user="使用者")
-    @app_commands.describe(game="選擇遊戲", user="查詢其他成員的資料，不填寫則查詢自己")
+    @app_commands.command(name="character_overview", description="Publicly display all of my characters")
+    @app_commands.rename(game="game", sort_key="sort", user="user")
+    @app_commands.describe(game="Select a game", user="Query data of other members, leave blank to query your own")
     @app_commands.choices(
         game=[
-            app_commands.Choice(name="原神", value="genshin"),
-            app_commands.Choice(name="星穹鐵道", value="hkrpg"),
+            app_commands.Choice(name="Genshin Impact", value="genshin"),
+            app_commands.Choice(name="Honkai: Star Rail", value="hkrpg"),
         ],
         sort_key=[
-            app_commands.Choice(name="等級", value="LEVEL"),
-            app_commands.Choice(name="元素", value="ELEMENT"),
-            app_commands.Choice(name="稀有度", value="RARITY"),
+            app_commands.Choice(name="Level", value="LEVEL"),
+            app_commands.Choice(name="Element", value="ELEMENT"),
+            app_commands.Choice(name="Raity", value="RARITY"),
         ],
     )
     @SlashCommandLogger
@@ -82,11 +82,11 @@ class CharactersCog(commands.Cog, name="character"):
                     data = await honkai_character_list.Creat(characters).start()
                     image = StarRaillCharterList(**data).card
             if image is None:
-                raise ValueError("沒有圖片")
+                raise ValueError("No image")
         except Exception:
             # 文字呈現
             view = DropdownView(user, characters)
-            await interaction.edit_original_response(content="請選擇角色：", view=view)
+            await interaction.edit_original_response(content="Please select a character：", view=view)
             return
         else:
             # 圖片呈現
@@ -94,7 +94,7 @@ class CharactersCog(commands.Cog, name="character"):
             image = image.convert("RGB")
             image.save(fp, "jpeg", optimize=True, quality=90)
             fp.seek(0)
-            embed = EmbedTemplate.normal(f"{user.display_name} 的角色一覽")
+            embed = EmbedTemplate.normal(f"{user.display_name} Character list")
             embed.set_image(url="attachment://image.jpeg")
             await interaction.edit_original_response(
                 embed=embed, attachments=[discord.File(fp, "image.jpeg")]
