@@ -32,9 +32,10 @@ class Server(commands.Cog):
         return web.Response(text=f"Uptime: {uptime_str}")
 
     def format_uptime(self, seconds):
-        hours, remainder = divmod(seconds, 3600)
+        days, remainder = divmod(seconds, 86400)
+        hours, remainder = divmod(remainder, 3600)
         minutes, seconds = divmod(remainder, 60)
-        return f"{hours}h {minutes}m {seconds}s"
+        return f"{days}d {hours}h {minutes}m {seconds}s"
 
     @commands.Cog.listener()
     async def on_ready(self):
