@@ -55,7 +55,7 @@ class Stats(commands.Cog):
         memory_percentage = memory_info.percent
 
         embed = discord.Embed(title=f"{bot_name} Info", color=discord.Color.blue())
-        embed.add_field(name="Name", value=f"{bot_name} [{bot_id}]", inline=False)
+        embed.add_field(name="Name", value=f"{bot_name}", inline=False)
         embed.add_field(name="API Latency", value=f"{latency}ms", inline=True)
         embed.add_field(name="Bot Uptime", value=uptime, inline=True)
         embed.add_field(name="Guilds", value=f"{len(self.bot.guilds)}", inline=True)
