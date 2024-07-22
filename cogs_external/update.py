@@ -22,7 +22,8 @@ class Update(commands.Cog):
     @app_commands.command(name="update", description="Update the bot from the Git repository")
     @is_owner()
     async def update(self, interaction: discord.Interaction):
-        initial_message = await interaction.response.send_message("Checking for updates...", ephemeral=True)
+        await interaction.response.defer(ephemeral=True)
+        initial_message = await interaction.followup.send("Checking for updates...", ephemeral=True)
         LOG.Cmd(f"@{interaction.user.name}#{interaction.user.discriminator} used /update")
         LOG.System("Update command received, checking for updates...")
 
