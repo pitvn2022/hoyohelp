@@ -27,10 +27,10 @@ def format_timedelta(td):
 
 def format_memory(used, total):
     """Format memory usage to show in MiB or GiB based on the total memory."""
-    if total >= 1024:
+    if total >= 1024:  # If total memory is 1 GiB or more
         used_str = f"{used / 1024:.1f}GiB"
         total_str = f"{total / 1024:.1f}GiB"
-    else:
+    else:  # If total memory is less than 1 GiB
         used_str = f"{used:.1f}MiB"
         total_str = f"{total:.1f}MiB"
     
@@ -51,7 +51,7 @@ class Stats(commands.Cog):
     @is_owner()
     async def slash_stats(self, interaction: discord.Interaction):
         # Log the command usage with user ID
-        LOG.Cmd(f"@{interaction.user.name}#{interaction.user.discriminator} used /stats：")
+        LOG.cmd(f"COMMAND】@{interaction.user.name}#{interaction.user.discriminator} used /stats：")
 
         # Get bot information
         bot_name = f"{self.bot.user.name}#{self.bot.user.discriminator}"
