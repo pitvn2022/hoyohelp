@@ -7,12 +7,15 @@ from datetime import datetime, timedelta
 from utility import config, LOG
 
 def format_timedelta(td):
-    """Format a timedelta object into a string with hours, minutes, and seconds."""
+    """Format a timedelta object into a string with days, hours, minutes, and seconds, showing only non-zero units."""
     seconds = int(td.total_seconds())
-    hours, remainder = divmod(seconds, 3600)  # 60*60
-    minutes, seconds = divmod(remainder, 60)  # 60
+    days, remainder = divmod(seconds, 86400)  # 86400 seconds in a day
+    hours, remainder = divmod(remainder, 3600)  # 3600 seconds in an hour
+    minutes, seconds = divmod(remainder, 60)  # 60 seconds in a minute
     
     parts = []
+    if days > 0:
+        parts.append(f"{days}d")
     if hours > 0:
         parts.append(f"{hours}h")
     if minutes > 0:
@@ -37,7 +40,7 @@ class Stats(commands.Cog):
     @is_owner()
     async def slash_stats(self, interaction: discord.Interaction):
         # Log the command usage with user ID
-        LOG.Cmd(f"@{interaction.user.name}({interaction.user.id}) used /stats")
+        LOG.cmd(f"COMMAND】@{interaction.user.name}#{interaction.user.discriminator} used /stats：")
 
         # Get bot information
         bot_name = f"{self.bot.user.name}#{self.bot.user.discriminator}"
@@ -54,6 +57,9 @@ class Stats(commands.Cog):
         memory_total = memory_info.total / (1024 ** 2)  # Convert to MiB
         memory_percentage = memory_info.percent
 
+        system_uptime_seconds = (datetime.utcnow() - datetime.fromtimestamp(psutil.boot_time())).total_seconds()
+        system_uptime = format_timedelta(timedelta(seconds=system_uptime_seconds))  # System's uptime
+
         embed = discord.Embed(title=f"{bot_name} Info", color=discord.Color.blue())
         embed.add_field(name="Name", value=f"{bot_name}", inline=False)
         embed.add_field(name="API Latency", value=f"{latency}ms", inline=True)
@@ -64,7 +70,7 @@ class Stats(commands.Cog):
         embed.add_field(name="CPU Usage", value=f"{cpu_usage}%", inline=True)
         embed.add_field(name="Memory Usage", value=f"{memory_used:.2f}MiB / {memory_total:.2f}MiB", inline=True)
         embed.add_field(name="Memory Usage Percentage", value=f"{memory_percentage}%", inline=True)
-        embed.add_field(name="System Uptime", value=str(timedelta(seconds=psutil.boot_time())), inline=True)
+        embed.add_field(name="System Uptime", value=system_uptime, inline=True)
 
         await interaction.response.send_message(embed=embed)
 
