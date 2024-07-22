@@ -25,6 +25,17 @@ def format_timedelta(td):
 
     return ' '.join(parts)
 
+def format_memory(used, total):
+    """Format memory usage to show in MiB or GiB based on the total memory."""
+    if total >= 1024:
+        used_str = f"{used / 1024:.1f}GiB"
+        total_str = f"{total / 1024:.1f}GiB"
+    else:
+        used_str = f"{used:.1f}MiB"
+        total_str = f"{total:.1f}MiB"
+    
+    return f"{used_str} / {total_str}"
+
 # Custom owner check
 def is_owner():
     async def predicate(interaction: discord.Interaction):
@@ -57,6 +68,8 @@ class Stats(commands.Cog):
         memory_total = memory_info.total / (1024 ** 2)  # Convert to MiB
         memory_percentage = memory_info.percent
 
+        memory_usage = format_memory(memory_used, memory_total)
+
         system_uptime_seconds = (datetime.utcnow() - datetime.fromtimestamp(psutil.boot_time())).total_seconds()
         system_uptime = format_timedelta(timedelta(seconds=system_uptime_seconds))  # System's uptime
 
@@ -68,7 +81,7 @@ class Stats(commands.Cog):
 
         embed.add_field(name="System Stats", value=f"OS: {os_name} {os_version}", inline=False)
         embed.add_field(name="CPU Usage", value=f"{cpu_usage}%", inline=True)
-        embed.add_field(name="Memory Usage", value=f"{memory_used:.2f}MiB / {memory_total:.2f}MiB", inline=True)
+        embed.add_field(name="Memory Usage", value=f"{memory_usage}", inline=True)
         embed.add_field(name="Memory Usage Percentage", value=f"{memory_percentage}%", inline=True)
         embed.add_field(name="System Uptime", value=system_uptime, inline=True)
 
