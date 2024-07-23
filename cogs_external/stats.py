@@ -51,7 +51,7 @@ class Stats(commands.Cog):
     @is_owner()
     async def slash_stats(self, interaction: discord.Interaction):
         # Log the command usage with user ID
-        LOG.Cmd(f"COMMAND】@{interaction.user.name}#{interaction.user.discriminator} used /stats：")
+        LOG.Cmd(f"COMMAND】@{interaction.user.name}#{interaction.user.id} used /stats：")
 
         # Get bot information
         bot_name = f"{self.bot.user.name}#{self.bot.user.discriminator}"
