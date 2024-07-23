@@ -7,7 +7,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from utility import LOG, config  # Import config from utility
+from utility import LOG, config  # Import LOG and config from utility
 
 # Custom owner check
 def is_owner():
@@ -22,17 +22,35 @@ class Update(commands.Cog):
     @app_commands.command(name="update", description="Update the bot from the Git repository")
     @is_owner()
     async def update(self, interaction: discord.Interaction):
-        await interaction.response.send_message("Updating the bot from the Git repository...", ephemeral=True)
-        LOG.System("Update command received, updating the bot...")
+        await interaction.response.defer(ephemeral=True)
+        initial_message = await interaction.followup.send("Checking for updates...", ephemeral=True)
+        LOG.Cmd(f"@{interaction.user.name}#{interaction.user.discriminator} used /update")
+        LOG.System("Update command received, checking for updates...")
+
+        # Fetch the latest changes from the remote repository
+        fetch_result = subprocess.run(["git", "fetch"], capture_output=True, text=True)
+        if fetch_result.returncode != 0:
+            await initial_message.edit(content=f"Failed to fetch from Git: {fetch_result.stderr}")
+            LOG.System(f"Failed to fetch from Git: {fetch_result.stderr}")
+            return
+
+        # Check for differences between local and remote versions
+        local_version = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+        remote_version = subprocess.run(["git", "rev-parse", "@{u}"], capture_output=True, text=True).stdout.strip()
+
+        if local_version == remote_version:
+            await initial_message.edit(content="The bot is already up-to-date.")
+            LOG.System("The bot is already up-to-date.")
+            return
 
         # Pull the latest changes from the Git repository
         pull_result = subprocess.run(["git", "pull"], capture_output=True, text=True)
         if pull_result.returncode != 0:
-            await interaction.followup.send(f"Failed to pull from Git: {pull_result.stderr}")
+            await initial_message.edit(content=f"Failed to pull from Git: {pull_result.stderr}")
             LOG.System(f"Failed to pull from Git: {pull_result.stderr}")
             return
 
-        await interaction.followup.send("Successfully updated the bot. Restarting now...")
+        await initial_message.edit(content="Successfully updated the bot. Restarting now...")
         LOG.System("Successfully updated the bot. Restarting now...")
 
         # Wait a few seconds to ensure the update message is sent
