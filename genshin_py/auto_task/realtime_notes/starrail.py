@@ -5,7 +5,7 @@ import genshin
 from database import Database, StarrailScheduleNotes
 from utility import EmbedTemplate
 
-from ... import parse_starrail_notes
+from ... import errors, parse_starrail_notes
 from .common import CheckResult, cal_next_check_time, get_realtime_notes
 
 
@@ -14,7 +14,10 @@ async def check_starrail_notes(user: StarrailScheduleNotes) -> CheckResult | Non
     try:
         notes = await get_realtime_notes(user)
     except Exception as e:
-        return CheckResult("星穹鐵道自動檢查即時便箋時發生錯誤，預計5小時後再檢查。", EmbedTemplate.error(e))
+        if isinstance(e, errors.GenshinAPIException) and isinstance(e.origin, genshin.errors.GeetestError):
+            return CheckResult("An error HSR automatically realtime note check, check again in 24 hours。", EmbedTemplate.error(e))
+        else:
+            return CheckResult("An error HSR automatically realtime note check, check again in 5 hours。", EmbedTemplate.error(e))
 
     if not isinstance(notes, genshin.models.StarRailNote):
         return None
